@@ -22,6 +22,11 @@ class StateLogger {
     this.notifyListeners()
   }
 
+  removeState(key: string) {
+    this.states.delete(key)
+    this.notifyListeners()
+  }
+
   getAllStates() {
     return new Map(this.states)
   }
@@ -98,6 +103,14 @@ function useLogState<T>(
       })
     }
   }, [value])
+
+  // 當組件卸載時自動清理狀態記錄
+  useEffect(() => {
+    return () => {
+      // 組件卸載時自動移除狀態記錄
+      globalStateLogger.removeState(stateKey)
+    }
+  }, [stateKey])
 
   return [value, setValue]
 }
