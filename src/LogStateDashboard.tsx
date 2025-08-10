@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { globalStateLogger } from './useLogState'
+import { VERSION } from './index'
 
 const LogStateDashboard = () => {
   const [allStates, setAllStates] = useState<Map<string, any>>(new Map())
@@ -88,96 +89,102 @@ const LogStateDashboard = () => {
           maxHeight: '400px'
         }}
       >
-        {Array.from(allStates.entries()).map(([key, data]) => (
-          <div
-            key={key}
-            style={{
-              marginBottom: '12px',
-              padding: '10px',
-              borderTop: '1px solid #444',
-              borderBottom: '1px solid #444',
-              borderRight: '1px solid #444',
-              borderRadius: '6px',
-              backgroundColor: data.isInitial
-                ? 'rgba(0,255,0,0.05)'
-                : 'rgba(255,255,255,0.05)',
-              borderLeft: data.isInitial
-                ? '3px solid #00ff00'
-                : '3px solid #ffaa00'
-            }}
-          >
-            {/* 狀態標題 */}
+        {Array.from(allStates.entries())
+          .sort(
+            ([, a], [, b]) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          )
+          .map(([key, data]) => (
             <div
+              key={key}
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginBottom: '8px'
+                marginBottom: '12px',
+                padding: '10px',
+                borderTop: '1px solid #444',
+                borderBottom: '1px solid #444',
+                borderRight: '1px solid #444',
+                borderRadius: '6px',
+                backgroundColor: data.isInitial
+                  ? 'rgba(0,255,0,0.05)'
+                  : 'rgba(255,255,255,0.05)',
+                borderLeft: data.isInitial
+                  ? '3px solid #00ff00'
+                  : '3px solid #ffaa00'
               }}
             >
+              {/* 狀態標題 */}
               <div
                 style={{
-                  color: '#ffff00',
-                  fontWeight: 'bold',
-                  fontSize: '13px'
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginBottom: '8px'
                 }}
               >
-                {key}
-                {data.isInitial && (
-                  <span style={{ color: '#00ff00' }}> (初始)</span>
-                )}
+                <div
+                  style={{
+                    color: '#ffff00',
+                    fontWeight: 'bold',
+                    fontSize: '13px'
+                  }}
+                >
+                  {key}
+                  {data.isInitial && (
+                    <span style={{ color: '#00ff00' }}> (初始)</span>
+                  )}
+                </div>
+                <div style={{ fontSize: '9px', color: '#ffffff' }}>
+                  {new Date(data.timestamp).toLocaleTimeString()}
+                </div>
               </div>
-              <div style={{ fontSize: '9px', color: '#ffffff' }}>
-                {new Date(data.timestamp).toLocaleTimeString()}
-              </div>
-            </div>
 
-            {/* 檔案資訊 */}
-            <div
-              style={{
-                fontSize: '10px',
-                color: '#ffffff',
-                marginBottom: '5px'
-              }}
-            >
-              🎯 {data.component} • 📂{' '}
-              {data.fullPath.replace('///(app-pages-browser)', '') || 'Unknown'}
-            </div>
-
-            {/* 狀態值 */}
-            <div
-              style={{
-                background: 'rgba(0,0,0,0.3)',
-                padding: '8px',
-                borderRadius: '4px',
-                border: '1px solid #333'
-              }}
-            >
+              {/* 檔案資訊 */}
               <div
                 style={{
-                  color: '#ffffff',
                   fontSize: '10px',
+                  color: '#ffffff',
                   marginBottom: '5px'
                 }}
               >
-                📦 值 ({data.type})
+                🎯 {data.component} • 📂{' '}
+                {data.fullPath.replace('///(app-pages-browser)', '') ||
+                  'Unknown'}
               </div>
-              <pre
+
+              {/* 狀態值 */}
+              <div
                 style={{
-                  margin: 0,
-                  fontSize: '10px',
-                  color: '#00ffaa',
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-all'
+                  background: 'rgba(0,0,0,0.3)',
+                  padding: '8px',
+                  borderRadius: '4px',
+                  border: '1px solid #333'
                 }}
               >
-                {typeof data.value === 'object'
-                  ? JSON.stringify(data.value, null, 2)
-                  : String(data.value)}
-              </pre>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginBottom: '5px'
+                  }}
+                >
+                  📦 值 ({data.type})
+                </div>
+                <pre
+                  style={{
+                    margin: 0,
+                    fontSize: '10px',
+                    color: '#00ffaa',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-all'
+                  }}
+                >
+                  {typeof data.value === 'object'
+                    ? JSON.stringify(data.value, null, 2)
+                    : String(data.value)}
+                </pre>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
         {allStates.size === 0 && (
           <div
@@ -191,6 +198,9 @@ const LogStateDashboard = () => {
             📭 尚未偵測到任何狀態
           </div>
         )}
+      </div>
+      <div style={{ textAlign: 'center', color: '#ffffff', fontSize: '12px' }}>
+        v{VERSION}
       </div>
     </div>
   )
