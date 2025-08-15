@@ -21,7 +21,6 @@ const LogStateDashboard = () => {
         setIsVisible(!isVisible)
       }
 
-      // ESC 關閉
       if (e.key === 'Escape' && isVisible) {
         setIsVisible(false)
       }
@@ -112,7 +111,6 @@ const LogStateDashboard = () => {
                   : '3px solid #ffaa00'
               }}
             >
-              {/* 狀態標題 */}
               <div
                 style={{
                   display: 'flex',
@@ -137,8 +135,6 @@ const LogStateDashboard = () => {
                   {new Date(data.timestamp).toLocaleTimeString()}
                 </div>
               </div>
-
-              {/* 檔案資訊 */}
               <div
                 style={{
                   fontSize: '10px',
@@ -150,8 +146,6 @@ const LogStateDashboard = () => {
                 {data.fullPath.replace('///(app-pages-browser)', '') ||
                   'Unknown'}
               </div>
-
-              {/* 狀態值 */}
               <div
                 style={{
                   background: 'rgba(0,0,0,0.3)',

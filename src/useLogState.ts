@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import LogStateDashboard from './LogStateDashboard'
 
-// 全域狀態收集器
 class StateLogger {
   private states = new Map<string, any>()
   private listeners = new Set<(states: Map<string, any>) => void>()
@@ -45,7 +44,6 @@ function getCallerInfo() {
   const stack = new Error().stack
   const lines = stack?.split('\n') || []
 
-  // 尋找呼叫者資訊（跳過這個函數和 useLogState）
   for (let i = 3; i < lines.length; i++) {
     const line = lines[i]
     if (
@@ -53,7 +51,6 @@ function getCallerInfo() {
       !line.includes('useLogState') &&
       !line.includes('getCallerInfo')
     ) {
-      // 嘗試解析函數名稱和檔案位置
       const functionMatch = line.match(/at (\w+)/)
       const fullPathMatch = line.match(/(\/[^:]+)/)
 
@@ -80,10 +77,8 @@ function useLogState<T>(
   const [value, setValue] = useState(initialValue)
   const isFirstRender = useRef(true)
 
-  // 記錄所有狀態變化（包括初始值）
   useEffect(() => {
     if (isFirstRender.current) {
-      // 第一次記錄初始值
       globalStateLogger.logState(stateKey, {
         component: caller.function,
         fullPath: caller.fullPath,
@@ -93,7 +88,6 @@ function useLogState<T>(
       })
       isFirstRender.current = false
     } else {
-      // 後續記錄所有變化
       globalStateLogger.logState(stateKey, {
         component: caller.function,
         fullPath: caller.fullPath,
@@ -104,10 +98,8 @@ function useLogState<T>(
     }
   }, [value])
 
-  // 當組件卸載時自動清理狀態記錄
   useEffect(() => {
     return () => {
-      // 組件卸載時自動移除狀態記錄
       globalStateLogger.removeState(stateKey)
     }
   }, [stateKey])
