@@ -1,6 +1,6 @@
 {
   "name": "react-uselogstate",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "A custom React hook library for state management with logging capabilities",
   "type": "module",
   "main": "./dist/index.js",

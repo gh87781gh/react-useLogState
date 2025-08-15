@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { globalStateLogger } from './useLogState'
-import { VERSION } from './index'
+import config from '../package.json'
 
 const LogStateDashboard = () => {
   const [allStates, setAllStates] = useState<Map<string, any>>(new Map())
@@ -167,7 +167,7 @@ const LogStateDashboard = () => {
                     marginBottom: '5px'
                   }}
                 >
-                  📦 值 ({data.type})
+                  📦 值 ({Array.isArray(data.value) ? 'Array' : data.type})
                 </div>
                 <pre
                   style={{
@@ -199,8 +199,15 @@ const LogStateDashboard = () => {
           </div>
         )}
       </div>
-      <div style={{ textAlign: 'center', color: '#ffffff', fontSize: '12px' }}>
-        v{VERSION}
+      <div
+        style={{
+          textAlign: 'center',
+          color: '#ffffff',
+          fontSize: '12px',
+          marginTop: '5px'
+        }}
+      >
+        v{config.version}
       </div>
     </div>
   )
