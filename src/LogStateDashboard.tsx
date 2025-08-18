@@ -12,7 +12,7 @@ const LogStateDashboard = () => {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
 
   const [allStates, setAllStates] = useState<Map<string, any>>(new Map())
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const unsubscribe = globalStateLogger.subscribe(setAllStates)
